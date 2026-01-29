@@ -45,14 +45,12 @@ public class LibraryEventProducer {
         String value = objectMapper.writeValueAsString(libraryEvent);
 
         // payload -> send default -> spring.kafka.template.default-topic=library-events -> in application.properties
-        var completableFuture = kafkaTemplate.sendDefault(key, value);
-        return completableFuture
+        return kafkaTemplate.sendDefault(key, value)
                 .whenComplete((sendResult, throwable) -> {
                     if (throwable != null) {
                         handleFailure(key, value, throwable);
                     } else {
                         handleSuccess(key, value, sendResult);
-
                     }
                 });
     }
@@ -67,8 +65,7 @@ public class LibraryEventProducer {
         // 1. Option
         //kafkaTemplate.send("library-events", key, value);
         // 2. Option
-        var completableFuture = kafkaTemplate.send(producerRecord);
-        return completableFuture
+        return kafkaTemplate.sendDefault(key, value)
                 .whenComplete((sendResult, throwable) -> {
                     if (throwable != null) {
                         handleFailure(key, value, throwable);
