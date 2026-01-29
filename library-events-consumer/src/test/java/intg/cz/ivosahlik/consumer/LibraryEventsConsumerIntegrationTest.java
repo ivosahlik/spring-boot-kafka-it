@@ -61,7 +61,6 @@ import static org.mockito.Mockito.verify;
 )
 public class LibraryEventsConsumerIntegrationTest {
 
-
     @Value("${topics.retry}")
     private String retryTopic;
 
