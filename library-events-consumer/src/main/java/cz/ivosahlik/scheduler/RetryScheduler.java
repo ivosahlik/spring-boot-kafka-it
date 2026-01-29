@@ -17,7 +17,7 @@ public class RetryScheduler {
     final LibraryEventsService libraryEventsService;
     final FailureRecordRepository failureRecordRepository;
 
-    @Scheduled(fixedRate = 10000 )
+    @Scheduled(fixedRate = 10_000 )
     public void retryFailedRecords(){
 
         log.info("Retrying Failed Records Started!");
@@ -31,9 +31,7 @@ public class RetryScheduler {
                     } catch (Exception e){
                         log.error("Exception in retryFailedRecords : ", e);
                     }
-
                 });
-
     }
 
     private ConsumerRecord<Integer, String> buildConsumerRecord(FailureRecord failureRecord) {
