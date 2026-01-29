@@ -1,0 +1,127 @@
+{
+  "info": {
+    "_postman_id": "da45a0de-c27b-4899-a680-caa84fc2d5d2",
+    "name": "Kafka",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27702499",
+    "_collection_link": "https://go.postman.co/collection/27702499-da45a0de-c27b-4899-a680-caa84fc2d5d2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "POST WITH-NULL-LIBRARY-EVENT-ID",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"libraryEventId\": null,\n  \"libraryEventType\": \"NEW\",\n  \"book\": {\n    \"bookId\": 456,\n    \"bookName\": \"Kafka Using Spring Boot 2.X\",\n    \"bookAuthor\": \"Test\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/libraryevent",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "libraryevent"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT WITH ID - 1",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"libraryEventId\": 1,\n  \"libraryEventType\": \"UPDATE\",\n  \"book\": {\n    \"bookId\": 456,\n    \"bookName\": \"Kafka Using Spring Boot 2.X\",\n    \"bookAuthor\": \"Test\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/libraryevent",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "libraryevent"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT WITH ID",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"libraryEventId\": 123,\n  \"libraryEventType\": \"UPDATE\",\n  \"book\": {\n    \"bookId\": 456,\n    \"bookName\": \"Kafka Using Spring Boot\",\n    \"bookAuthor\": \"Test\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/libraryevent",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "libraryevent"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT WITHOUT ID",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"libraryEventId\": null,\n  \"libraryEventType\": \"UPDATE\",\n  \"book\": {\n    \"bookId\": 456,\n    \"bookName\": \"Kafka Using Spring Boot\",\n    \"bookAuthor\": \"Test\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/libraryevent",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "libraryevent"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
