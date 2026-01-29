@@ -1,6 +1,8 @@
 package cz.ivosahlik.config;
 
+import cz.ivosahlik.service.FailureService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,8 @@ public class LibraryEventsConsumerConfig {
     @Autowired
     KafkaTemplate kafkaTemplate;
 
-//    @Autowired
-//    FailureService failureService;
+    @Autowired
+    FailureService failureService;
 
     @Value("${topics.retry:library-events.RETRY}")
     private String retryTopic;
@@ -65,7 +67,7 @@ public class LibraryEventsConsumerConfig {
         if (exception.getCause() instanceof RecoverableDataAccessException) {
             log.info("Inside the recoverable logic");
             //Add any Recovery Code here.
-            //failureService.saveFailedRecord((ConsumerRecord<Integer, String>) record, exception, RETRY);
+            failureService.saveFailedRecord((ConsumerRecord<Integer, String>) record, exception, RETRY);
 
         } else {
             log.info("Inside the non recoverable logic and skipping the record : {}", record);
@@ -86,7 +88,7 @@ public class LibraryEventsConsumerConfig {
         /**
          * Just the Custom Error Handler
          */
-        // var defaultErrorHandler =  new DefaultErrorHandler(fixedBackOff);
+//        var defaultErrorHandler = new DefaultErrorHandler(fixedBackOff);
 
         /**
          * Error Handler with the BackOff, Exceptions to Ignore, RetryListener

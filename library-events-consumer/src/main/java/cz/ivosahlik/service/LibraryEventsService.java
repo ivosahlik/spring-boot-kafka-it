@@ -40,14 +40,12 @@ public class LibraryEventsService {
                 save(libraryEvent);
                 break;
             case UPDATE:
-                //validate the libraryevent
                 validate(libraryEvent);
                 save(libraryEvent);
                 break;
             default:
                 log.info("Invalid Library Event Type");
         }
-
     }
 
     private void validate(LibraryEvent libraryEvent) {
