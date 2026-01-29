@@ -54,7 +54,7 @@ public class LibraryEventsControllerIntegrationTestApproach2 {
         headers.set("content-type", MediaType.APPLICATION_JSON.toString());
         HttpEntity<LibraryEvent> request = new HttpEntity<>(libraryEvent, headers);
 
-        mockProducerCall(libraryEvent, objectMapper.writeValueAsString(libraryEvent));
+        mockProducerCallForSendDefault(libraryEvent, objectMapper.writeValueAsString(libraryEvent));
 
         //when
         ResponseEntity<LibraryEvent> responseEntity = restTemplate.exchange("/v1/libraryevent", HttpMethod.POST, request, LibraryEvent.class);
@@ -63,7 +63,7 @@ public class LibraryEventsControllerIntegrationTestApproach2 {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
 
-        Mockito.verify(kafkaTemplate, times(1)).send(any(ProducerRecord.class));
+        Mockito.verify(kafkaTemplate, times(1)).sendDefault(any(Integer.class), any(String.class));
     }
 
 
@@ -96,6 +96,16 @@ public class LibraryEventsControllerIntegrationTestApproach2 {
         SendResult<Integer, String> sendResult = new SendResult<Integer, String>(producerRecord,recordMetadata);
         var future = CompletableFuture.supplyAsync(()-> sendResult);
         when(kafkaTemplate.send(isA(ProducerRecord.class))).thenReturn(future);
+    }
+
+    private void mockProducerCallForSendDefault(LibraryEvent libraryEvent, String record) {
+        //mock behavior for sendDefault
+        ProducerRecord<Integer, String> producerRecord = new ProducerRecord("library-events", libraryEvent.libraryEventId(), record);
+        RecordMetadata recordMetadata = new RecordMetadata(new TopicPartition("library-events", 1),
+                1,1,System.currentTimeMillis(), 1, 2);
+        SendResult<Integer, String> sendResult = new SendResult<Integer, String>(producerRecord,recordMetadata);
+        var future = CompletableFuture.supplyAsync(()-> sendResult);
+        when(kafkaTemplate.sendDefault(any(Integer.class), any(String.class))).thenReturn(future);
     }
 
 }

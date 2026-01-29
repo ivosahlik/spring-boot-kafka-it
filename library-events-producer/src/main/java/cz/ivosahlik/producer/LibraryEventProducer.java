@@ -30,30 +30,15 @@ public class LibraryEventProducer {
     @Value("${spring.kafka.topic}")
     public String topic;
 
-    public CompletableFuture<SendResult<Integer, String>> sendLibraryEvent(LibraryEvent libraryEvent) throws JsonProcessingException {
+    public CompletableFuture<SendResult<Integer, String>> sendLibraryEvent(LibraryEvent libraryEvent)
+            throws JsonProcessingException {
 
         Integer key = libraryEvent.libraryEventId();
+        // Serialization
         String value = objectMapper.writeValueAsString(libraryEvent);
 
+        // payload -> send default -> spring.kafka.template.default-topic=library-events -> in application.properties
         var completableFuture = kafkaTemplate.sendDefault(key, value);
-       return completableFuture
-                .whenComplete((sendResult, throwable) -> {
-                    if (throwable != null) {
-                        handleFailure(key, value, throwable);
-                    } else {
-                        handleSuccess(key, value, sendResult);
-
-                    }
-                });
-    }
-
-    public CompletableFuture<SendResult<Integer, String>> sendLibraryEvent_Approach2(LibraryEvent libraryEvent) throws JsonProcessingException {
-
-        Integer key = libraryEvent.libraryEventId();
-        String value = objectMapper.writeValueAsString(libraryEvent);
-
-        ProducerRecord<Integer, String> producerRecord = buildProducerRecord(key, value, topic);
-        var completableFuture = kafkaTemplate.send(producerRecord);
         return completableFuture
                 .whenComplete((sendResult, throwable) -> {
                     if (throwable != null) {
@@ -65,6 +50,27 @@ public class LibraryEventProducer {
                 });
     }
 
+    public CompletableFuture<SendResult<Integer, String>> sendLibraryEvent_Approach2(LibraryEvent libraryEvent)
+            throws JsonProcessingException {
+
+        Integer key = libraryEvent.libraryEventId();
+        String value = objectMapper.writeValueAsString(libraryEvent);
+
+        ProducerRecord<Integer, String> producerRecord = buildProducerRecord(key, value, topic);
+        // 1. Option
+        //kafkaTemplate.send("library-events", key, value);
+        // 2. Option
+        var completableFuture = kafkaTemplate.send(producerRecord);
+        return completableFuture
+                .whenComplete((sendResult, throwable) -> {
+                    if (throwable != null) {
+                        handleFailure(key, value, throwable);
+                    } else {
+                        handleSuccess(key, value, sendResult);
+                    }
+                });
+    }
+
     private ProducerRecord<Integer, String> buildProducerRecord(Integer key, String value, String topic) {
         List<Header> recordHeaders = List.of(new RecordHeader("event-source", "scanner".getBytes()));
 
@@ -72,11 +78,13 @@ public class LibraryEventProducer {
     }
 
 
-    public SendResult<Integer, String> sendLibraryEventSynchronous(LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
+    public SendResult<Integer, String> sendLibraryEventSynchronous(LibraryEvent libraryEvent)
+            throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
         Integer key = libraryEvent.libraryEventId();
         String value = objectMapper.writeValueAsString(libraryEvent);
-        SendResult<Integer, String> sendResult = null;
+        SendResult<Integer, String> sendResult;
         try {
+            // payload -> send default -> spring.kafka.template.default-topic=library-events -> in application.properties
             sendResult = kafkaTemplate.sendDefault(key, value).get(1, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException e) {
             log.error("ExecutionException/InterruptedException Sending the Message and the exception is {}", e.getMessage());
@@ -87,21 +95,20 @@ public class LibraryEventProducer {
         }
 
         return sendResult;
-
     }
 
     private void handleFailure(Integer key, String value, Throwable ex) {
-        log.error("Error Sending the Message and the exception is {}", ex.getMessage());
-//        try {
-//            throw ex;
-//        } catch (Throwable throwable) {
-//            log.error("Error in OnFailure: {}", throwable.getMessage());
-//        }
-
-
+        log.error("Error Sending the Message for the key: {} and the value is {}, the exception is {}",
+                key, value, ex.getMessage());
+        try {
+            throw ex;
+        } catch (Throwable throwable) {
+            log.error("Error in OnFailure: {}", throwable.getMessage());
+        }
     }
 
     private void handleSuccess(Integer key, String value, SendResult<Integer, String> result) {
-        log.info("Message Sent SuccessFully for the key : {} and the value is {} , partition is {}", key, value, result.getRecordMetadata().partition());
+        log.info("Message Sent SuccessFully for the key: {} and the value is {} , partition is {}",
+                key, value, result.getRecordMetadata().partition());
     }
 }

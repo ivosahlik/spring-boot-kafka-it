@@ -48,7 +48,6 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-
 @SpringBootTest
 @EmbeddedKafka(topics = {
         "library-events",
@@ -87,7 +86,6 @@ public class LibraryEventsConsumerIntegrationTest {
     @Autowired
     LibraryEventsRepository libraryEventsRepository;
 
-
     @Autowired
     FailureRecordRepository failureRecordRepository;
 
@@ -116,10 +114,8 @@ public class LibraryEventsConsumerIntegrationTest {
 
     @AfterEach
     void tearDown() {
-
         libraryEventsRepository.deleteAll();
         failureRecordRepository.deleteAll();
-
     }
 
     @Test
@@ -142,7 +138,6 @@ public class LibraryEventsConsumerIntegrationTest {
             assert libraryEvent.getLibraryEventId() != null;
             assertEquals(456, libraryEvent.getBook().getBookId());
         });
-
     }
 
     @Test
@@ -183,7 +178,6 @@ public class LibraryEventsConsumerIntegrationTest {
         CountDownLatch latch = new CountDownLatch(1);
         latch.await(5, TimeUnit.SECONDS);
 
-
         verify(libraryEventsConsumerSpy, times(1)).onMessage(isA(ConsumerRecord.class));
         verify(libraryEventsServiceSpy, times(1)).processLibraryEvent(isA(ConsumerRecord.class));
 
@@ -203,8 +197,6 @@ public class LibraryEventsConsumerIntegrationTest {
                 .forEach(header -> {
                     System.out.println("Header Key : " + header.key() + ", Header Value : " + new String(header.value()));
                 });
-
-
     }
 
     @Test
@@ -312,7 +304,6 @@ public class LibraryEventsConsumerIntegrationTest {
         failureRecordRepository.findAll().forEach(failureRecord -> {
             System.out.println("failureRecord : " + failureRecord);
         });
-
     }
 
 }
