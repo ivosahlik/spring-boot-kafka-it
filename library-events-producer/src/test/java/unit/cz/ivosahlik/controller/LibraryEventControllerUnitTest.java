@@ -34,7 +34,6 @@ public class LibraryEventControllerUnitTest {
     @Test
     void postLibraryEvent() throws Exception {
         //given
-
         LibraryEvent libraryEvent = TestUtil.libraryEventRecord();
 
         String json = objectMapper.writeValueAsString(libraryEvent);
@@ -50,7 +49,6 @@ public class LibraryEventControllerUnitTest {
     @Test
     void postLibraryEvent_4xx() throws Exception {
         //given
-
         LibraryEvent libraryEvent = TestUtil.libraryEventRecordWithInvalidBook();
 
         String json = objectMapper.writeValueAsString(libraryEvent);
@@ -66,10 +64,7 @@ public class LibraryEventControllerUnitTest {
 
     @Test
     void updateLibraryEvent() throws Exception {
-
         //given
-
-
         String json = objectMapper.writeValueAsString(TestUtil.libraryEventRecordUpdate());
         when(libraryEventProducer.sendLibraryEvent_Approach2(isA(LibraryEvent.class))).thenReturn(null);
 
@@ -83,9 +78,7 @@ public class LibraryEventControllerUnitTest {
 
     @Test
     void updateLibraryEvent_withNullLibraryEventId() throws Exception {
-
         //given
-
         String json = objectMapper.writeValueAsString(TestUtil.libraryEventRecordUpdateWithNullLibraryEventId());
         when(libraryEventProducer.sendLibraryEvent_Approach2(isA(LibraryEvent.class))).thenReturn(null);
 
@@ -102,7 +95,6 @@ public class LibraryEventControllerUnitTest {
     void updateLibraryEvent_withNullInvalidEventType() throws Exception {
 
         //given
-
         String json = objectMapper.writeValueAsString(TestUtil.newLibraryEventRecordWithLibraryEventId());
         //when(libraryEventProducer.sendLibraryEvent_Approach2(isA(LibraryEvent.class))).thenReturn(null);
 

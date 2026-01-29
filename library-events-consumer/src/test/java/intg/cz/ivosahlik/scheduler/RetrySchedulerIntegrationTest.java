@@ -45,7 +45,6 @@ public class RetrySchedulerIntegrationTest {
     }
 
 
-
     @Test
     @Disabled
     public void retryFailedRecords() throws JsonProcessingException {
