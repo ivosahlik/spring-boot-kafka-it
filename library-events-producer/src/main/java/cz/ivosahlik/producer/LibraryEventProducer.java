@@ -65,7 +65,7 @@ public class LibraryEventProducer {
         // 1. Option
         //kafkaTemplate.send("library-events", key, value);
         // 2. Option
-        return kafkaTemplate.sendDefault(key, value)
+        return kafkaTemplate.send(producerRecord)
                 .whenComplete((sendResult, throwable) -> {
                     if (throwable != null) {
                         handleFailure(key, value, throwable);
