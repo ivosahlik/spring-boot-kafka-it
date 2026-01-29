@@ -14,7 +14,7 @@ public class LibraryEventsConsumerManualOffset implements AcknowledgingMessageLi
     @Override
     @KafkaListener(topics = "${spring.kafka.template.default-topic}")
     public void onMessage(ConsumerRecord<Integer, String> consumerRecord, Acknowledgment acknowledgment) {
-        log.info("ConsumerRecord in Manual (commit offsetu) Offset Consumer: {} ", consumerRecord);
+        log.info("ConsumerRecord in Manual (commit offset) Offset Consumer: {} ", consumerRecord);
         acknowledgment.acknowledge();
     }
 }
