@@ -48,7 +48,8 @@ public class LibraryEventsControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        Map<String, Object> configs = new HashMap<>(KafkaTestUtils.consumerProps("group1", "true", embeddedKafkaBroker));
+        Map<String, Object> configs = new HashMap<>(
+                KafkaTestUtils.consumerProps("group1", "true", embeddedKafkaBroker));
         configs.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         consumer = new DefaultKafkaConsumerFactory<>(configs, new IntegerDeserializer(), new StringDeserializer()).createConsumer();
         embeddedKafkaBroker.consumeFromAllEmbeddedTopics(consumer);
@@ -75,7 +76,7 @@ public class LibraryEventsControllerIntegrationTest {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         //Instantiate a consumer
-        // Read the record , assert the count and parse the record and assert on it.
+        // Read the record, assert the count and parse the record and assert on it.
 
         ConsumerRecords<Integer, String> consumerRecords = KafkaTestUtils.getRecords(consumer);
         //Thread.sleep(3000);
@@ -85,8 +86,6 @@ public class LibraryEventsControllerIntegrationTest {
             assertEquals(libraryEvent, libraryEventActual);
 
         });
-
-
     }
 
     @Test
@@ -98,13 +97,11 @@ public class LibraryEventsControllerIntegrationTest {
         headers.set("content-type", MediaType.APPLICATION_JSON.toString());
         HttpEntity<LibraryEvent> request = new HttpEntity<>(libraryEventUpdate, headers);
 
-
         //when
         ResponseEntity<LibraryEvent> responseEntity = restTemplate.exchange("/v1/libraryevent", HttpMethod.PUT, request, LibraryEvent.class);
 
         //then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
 
         ConsumerRecords<Integer, String> consumerRecords = KafkaTestUtils.getRecords(consumer);
         //Thread.sleep(3000);
@@ -115,7 +112,5 @@ public class LibraryEventsControllerIntegrationTest {
                 assertEquals(libraryEventUpdate, libraryEventActual);
             }
         });
-
-
     }
 }

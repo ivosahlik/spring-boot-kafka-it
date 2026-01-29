@@ -73,7 +73,6 @@ public class LibraryEventProducerUnitTest {
         //eventProducer.sendLibraryEvent_Approach2(TestUtil.libraryEventRecord()).get();
         var exception = assertThrows(Exception.class, completableFuture1::get);
         assertEquals("Exception Calling Kafka", exception.getMessage());
-
     }
 
     @Test
@@ -98,6 +97,5 @@ public class LibraryEventProducerUnitTest {
         //then
         SendResult<Integer, String> sendResult1 = completableFuture.get();
         assert sendResult1.getRecordMetadata().partition() == 1;
-
     }
 }

@@ -47,7 +47,6 @@ public class LibraryEventsControllerIntegrationTestApproach2 {
     @Test
     void postLibraryEvent() throws JsonProcessingException {
 
-
         LibraryEvent libraryEvent = TestUtil.libraryEventRecord();
 
         HttpHeaders headers = new HttpHeaders();
@@ -61,7 +60,6 @@ public class LibraryEventsControllerIntegrationTestApproach2 {
 
         //then
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-
 
         Mockito.verify(kafkaTemplate, times(1)).sendDefault(any(Integer.class), any(String.class));
     }
@@ -85,7 +83,6 @@ public class LibraryEventsControllerIntegrationTestApproach2 {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         Mockito.verify(kafkaTemplate, times(1)).send(any(ProducerRecord.class));
-
     }
 
     private void mockProducerCall(LibraryEvent libraryEvent, String record) {

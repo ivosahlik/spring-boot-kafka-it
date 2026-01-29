@@ -45,7 +45,6 @@ public class LibraryEventControllerUnitTest {
         .content(json)
         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-
     }
 
     @Test
@@ -63,7 +62,6 @@ public class LibraryEventControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
         .andExpect(content().string(expectedErrorMessage));
-
     }
 
     @Test
@@ -81,7 +79,6 @@ public class LibraryEventControllerUnitTest {
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -99,7 +96,6 @@ public class LibraryEventControllerUnitTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
         .andExpect(content().string("Please pass the LibraryEventId"));
-
     }
 
     @Test
@@ -117,6 +113,5 @@ public class LibraryEventControllerUnitTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Only UPDATE event type is supported"));
-
     }
 }
