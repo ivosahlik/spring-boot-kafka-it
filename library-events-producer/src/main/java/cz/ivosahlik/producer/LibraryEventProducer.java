@@ -35,6 +35,13 @@ public class LibraryEventProducer {
 
         Integer key = libraryEvent.libraryEventId();
         // Serialization
+//        Srovnání přehledně
+//        Serializer	Čitelnost	Výkon	    Schéma	Doporučení
+//        String	    ⭐⭐⭐	    ⭐	        ❌	    jen demo
+//        JSON	        ⭐⭐	    ⭐⭐	    ❌	    malé systémy
+//        Avro	        ❌	        ⭐⭐⭐⭐	✅	    produkce
+//        Protobuf	    ❌	        ⭐⭐⭐⭐	✅	    enterprise
+//        Custom	    ?	        ?	        ?	    výjimky
         String value = objectMapper.writeValueAsString(libraryEvent);
 
         // payload -> send default -> spring.kafka.template.default-topic=library-events -> in application.properties
